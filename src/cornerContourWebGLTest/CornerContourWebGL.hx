@@ -92,38 +92,6 @@ class CornerContourWebGL {
         initDraw();
         
     }
-    inline
-    function initMouse(){
-        var body = Browser.document.body;
-        body.onmousedown = mouseDown;
-        body.onmouseup   = mouseUp;
-    }
-    var x: Float;
-    var y: Float;
-    var isDown: Bool = true;
-    public function mouseXY( e: Event ){
-        var rect = mainSheet.canvasGL.getBoundingClientRect();
-        var m: MouseEvent = cast( e, MouseEvent );
-        x = m.clientX - rect.left;
-        y = m.clientY - rect.top;
-        isDown = true;
-    }
-    inline
-    function mouseDown( e: Event ){
-        mouseXY( e );
-        var body = Browser.document.body;
-        body.onmousemove = mouseMove;
-    }
-    inline 
-    function mouseMove( e: Event ){
-        mouseXY( e );
-    }
-    inline
-    function mouseUp( e: Event ){
-        var body = Browser.document.body;
-        body.onmousemove = null;
-        isDown = false;
-    }
     public function initDraw(){
         drawingShape();
         drawingTexture();
@@ -134,6 +102,7 @@ class CornerContourWebGL {
         renderer.setup();
         renderer.modeEnable();
         setAnimate();
+        mainSheet.initMouseGL();
     }
     inline
     function creategl( ){
@@ -175,8 +144,8 @@ class CornerContourWebGL {
         pen2D.arr = new Array2DTriangles();
         
         var s = Std.int( pen2D.pos );
-        if( isDown ) {
-            circle( pen2D, x, y, 5, 0xFFFF0000 );
+        if( mainSheet.isDown ) {
+            circle( pen2D, mainSheet.mouseX, mainSheet.mouseY, 5, 0xFFFF0000 );
         } else {
             //circle( pen2D, x, y, 5, 0x00FF0000 );
         }
@@ -187,6 +156,8 @@ class CornerContourWebGL {
     inline
     function render(){
         clearAll( gl, width, height, .9, .9, .9, 1. );
+        // for black.
+        //clearAll( gl, width, height, 0., 0., 0., 1. );
         // draw order irrelevant here
         drawingTexture();
         drawingShape();
@@ -203,7 +174,7 @@ class CornerContourWebGL {
     }
     inline
     function renderShape(){
-        //if( isDown ){
+        //if( mainSheet.isDown ){
         renderer.modeEnable();
         renderer.rearrangeData(); // destroy data and rebuild
         renderer.updateData(); // update
