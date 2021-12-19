@@ -22,6 +22,7 @@ import js.html.CanvasRenderingContext2D;
 // html stuff
 import cornerContour.web.Sheet;
 import cornerContour.web.DivertTrace;
+import cornerContour.shape.Circles;
 
 import htmlHelper.tools.AnimateTimer;
 import cornerContour.web.RendererTexture;
@@ -40,6 +41,11 @@ import js.html.webgl.RenderingContext;
 import js.html.webgl.Program;
 import js.html.webgl.Texture;
 
+// js generic
+import js.Browser;
+import js.html.MouseEvent;
+import js.html.Event;
+
 function main(){
     new CornerContourWebGL();
 }
@@ -47,6 +53,7 @@ function main(){
 class CornerContourWebGL {
     // cornerContour specific code
     var sketcher:       Sketcher;
+    var pen2Dtexture:   Pen2D;
     var pen2D:          Pen2D;
     // WebGL/Html specific code
     public var gl:               RenderingContext;
@@ -55,9 +62,12 @@ class CornerContourWebGL {
     public var height:           Int;
     public var mainSheet:        Sheet;
     var divertTrace:             DivertTrace;
-    var renderer:                RendererTexture;
-    public var imageLoader:      ImageLoader;
     
+    var rendererTexture:         RendererTexture;
+    var renderer:                Renderer;
+    
+    public var imageLoader:      ImageLoader;
+    var textureDemo = false;
     public function new(){
         divertTrace = new DivertTrace();
         trace('Contour Test');
@@ -66,23 +76,60 @@ class CornerContourWebGL {
         creategl();
         // use Pen to draw to Array
         initContours();
-        renderer = { gl: gl, pen: pen2D, width: width, height: height };
+        renderer        = { gl: gl, pen: pen2D,        width: width, height: height };
+        rendererTexture = { gl: gl, pen: pen2Dtexture, width: width, height: height };
         imageLoader = new ImageLoader( [], setup, true );
         imageLoader.loadEncoded( [ HaxeLogo.png ], [ 'haxeLogo' ] );
     }
     public function setup(){
-        renderer.img = imageLoader.imageArr[ 0 ];
-        trace( renderer.img );
-        renderer.withAlpha();
-        renderer.hasImage = true;
-        renderer.transformUVArr    = [ 2.,0.,0.
-                                     , 0.,2.,0.
-                                     , 0.,0.,1.];
-        
+        rendererTexture.img = imageLoader.imageArr[ 0 ];
+        trace( rendererTexture.img );
+        rendererTexture.withAlpha();
+        rendererTexture.hasImage = true;
+        rendererTexture.transformUVArr    = [ 2.,0.,0.
+                                 , 0.,2.,0.
+                                 , 0.,0.,1.];
         initDraw();
+        
+    }
+    inline
+    function initMouse(){
+        var body = Browser.document.body;
+        body.onmousedown = mouseDown;
+        body.onmouseup   = mouseUp;
+    }
+    var x: Float;
+    var y: Float;
+    var isDown: Bool = true;
+    public function mouseXY( e: Event ){
+        var rect = mainSheet.canvasGL.getBoundingClientRect();
+        var m: MouseEvent = cast( e, MouseEvent );
+        x = m.clientX - rect.left;
+        y = m.clientY - rect.top;
+        isDown = true;
+    }
+    inline
+    function mouseDown( e: Event ){
+        mouseXY( e );
+        var body = Browser.document.body;
+        body.onmousemove = mouseMove;
+    }
+    inline 
+    function mouseMove( e: Event ){
+        mouseXY( e );
+    }
+    inline
+    function mouseUp( e: Event ){
+        var body = Browser.document.body;
+        body.onmousemove = null;
+        isDown = false;
     }
     public function initDraw(){
-        drawing();
+        drawingShape();
+        drawingTexture();
+        rendererTexture.rearrangeData();
+        rendererTexture.setup();
+        rendererTexture.modeEnable();
         renderer.rearrangeData();
         renderer.setup();
         renderer.modeEnable();
@@ -98,12 +145,16 @@ class CornerContourWebGL {
     function initContours(){
         pen2D = new Pen2D( 0xFFffFFff );
         pen2D.currentColor = 0xFFffFFff;
-        sketcher = new Sketcher( pen2D, StyleSketch.Fine, StyleEndLine.no );
+        pen2Dtexture = new Pen2D( 0xFFffFFff );
+        pen2Dtexture.currentColor = 0xFFffFFff;
+        sketcher = new Sketcher( pen2Dtexture, StyleSketch.Fine, StyleEndLine.no );
     }
-    public function drawing(){
-        pen2D.pos = 0;
-        pen2D.arr = new Array2DTriangles();
-        var s = Std.int( pen2D.pos );
+    inline 
+    function drawingTexture(){
+        allRangeTexture = new Array<IteratorRange>();
+        pen2Dtexture.pos = 0;
+        pen2Dtexture.arr = new Array2DTriangles();
+        var st = Std.int( pen2Dtexture.pos );
         for( i in 1...80 ){
             sketcher.width = 7*Math.random()+1.5;
             var rnd0 = 0.6*(1-Math.random()*2);
@@ -114,17 +165,50 @@ class CornerContourWebGL {
             sketcher.moveTo( i*(10+rnd0), 10 );
             sketcher.lineTo( i*(10+rnd1), 800 );
         }
+        allRangeTexture.push( st...Std.int( pen2Dtexture.pos - 1 ) );
+    }
+    
+    inline
+    function drawingShape(){
+        allRange = new Array<IteratorRange>();
+        pen2D.pos = 0;
+        pen2D.arr = new Array2DTriangles();
+        
+        var s = Std.int( pen2D.pos );
+        if( isDown ) {
+            circle( pen2D, x, y, 5, 0xFFFF0000 );
+        } else {
+            //circle( pen2D, x, y, 5, 0x00FF0000 );
+        }
         allRange.push( s...Std.int( pen2D.pos - 1 ) );
     }
-
     var allRange = new Array<IteratorRange>();
+    var allRangeTexture = new Array<IteratorRange>();
     inline
     function render(){
         clearAll( gl, width, height, .9, .9, .9, 1. );
-        drawing();
+        // draw order irrelevant here
+        drawingTexture();
+        drawingShape();
+        // you can adjust draw order
+        renderTexture();
+        renderShape();
+    }
+    inline 
+    function renderTexture(){
+        rendererTexture.modeEnable();
+        rendererTexture.rearrangeData(); // destroy data and rebuild
+        rendererTexture.updateData(); // update
+        rendererTexture.drawTextureShape( allRangeTexture[0].start...allRangeTexture[0].max, 0x00FFFFFF );
+    }
+    inline
+    function renderShape(){
+        //if( isDown ){
+        renderer.modeEnable();
         renderer.rearrangeData(); // destroy data and rebuild
         renderer.updateData(); // update
-        renderer.drawTextureShape( allRange[0].start...allRange[0].max, 0x00FFFFFF );
+        renderer.drawData( allRange[0].start...allRange[0].max );
+            //}
     }
     inline
     function setAnimate(){
