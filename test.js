@@ -13,6 +13,12 @@ Std.__name__ = true;
 Std.string = function(s) {
 	return js_Boot.__string_rec(s,"");
 };
+var cornerContour_IContour = function() { };
+cornerContour_IContour.__name__ = true;
+cornerContour_IContour.__isInterface__ = true;
+cornerContour_IContour.prototype = {
+	__class__: cornerContour_IContour
+};
 var cornerContour_Contour = function(pen_,endLine_) {
 	if(endLine_ == null) {
 		endLine_ = 0;
@@ -25,6 +31,7 @@ var cornerContour_Contour = function(pen_,endLine_) {
 	this.endLine = endLine_;
 };
 cornerContour_Contour.__name__ = true;
+cornerContour_Contour.__interfaces__ = [cornerContour_IContour];
 cornerContour_Contour.prototype = {
 	reset: function() {
 		this.angleA = 0;
@@ -6867,6 +6874,13 @@ cornerContour_Contour.prototype = {
 		}
 		return totalSteps;
 	}
+	,__class__: cornerContour_Contour
+};
+var cornerContour_IPen = function() { };
+cornerContour_IPen.__name__ = true;
+cornerContour_IPen.__isInterface__ = true;
+cornerContour_IPen.prototype = {
+	__class__: cornerContour_IPen
 };
 var cornerContour_Pen2D = function(col) {
 	var this1 = [];
@@ -6875,6 +6889,7 @@ var cornerContour_Pen2D = function(col) {
 	this.currentColor = col;
 };
 cornerContour_Pen2D.__name__ = true;
+cornerContour_Pen2D.__interfaces__ = [cornerContour_IPen];
 cornerContour_Pen2D.prototype = {
 	get_pos: function() {
 		return this.arr[0];
@@ -6898,7 +6913,11 @@ cornerContour_Pen2D.prototype = {
 		this.arr[0] = pos_;
 		return 1;
 	}
+	,__class__: cornerContour_Pen2D
 };
+var justPath_IPathContext = function() { };
+justPath_IPathContext.__name__ = true;
+justPath_IPathContext.__isInterface__ = true;
 var cornerContour_Sketcher = function(pen_,sketchForm_,endLine_) {
 	if(endLine_ == null) {
 		endLine_ = 0;
@@ -6948,6 +6967,7 @@ var cornerContour_Sketcher = function(pen_,sketchForm_,endLine_) {
 	this.dim = [];
 };
 cornerContour_Sketcher.__name__ = true;
+cornerContour_Sketcher.__interfaces__ = [justPath_IPathContext];
 cornerContour_Sketcher.prototype = {
 	tracerLine: function(x_,y_) {
 		haxe_Log.trace("lineTo( " + this.x + ", " + this.y + ", " + x_ + ", " + y_ + ", width )",{ fileName : "cornerContour/Sketcher.hx", lineNumber : 31, className : "cornerContour.Sketcher", methodName : "tracerLine"});
@@ -7011,6 +7031,7 @@ cornerContour_Sketcher.prototype = {
 			this.y = y_;
 		}
 	}
+	,__class__: cornerContour_Sketcher
 };
 var cornerContour_io_Array2DTriangles = {};
 cornerContour_io_Array2DTriangles.get_ax = function(this1) {
@@ -7099,6 +7120,10 @@ cornerContour_io_ColorTriangles2D.set_ay = function(this1,v) {
 	this1[(this1[0] | 0) * 18 + 1 + 2] = v;
 	return v;
 };
+cornerContour_io_ColorTriangles2D.set_redA = function(this1,v) {
+	this1[(this1[0] | 0) * 18 + 2 + 2] = v;
+	return v;
+};
 cornerContour_io_ColorTriangles2D.get_bx = function(this1) {
 	return this1[(this1[0] | 0) * 18 + 6 + 2];
 };
@@ -7113,6 +7138,10 @@ cornerContour_io_ColorTriangles2D.set_by = function(this1,v) {
 	this1[(this1[0] | 0) * 18 + 7 + 2] = v;
 	return v;
 };
+cornerContour_io_ColorTriangles2D.set_redB = function(this1,v) {
+	this1[(this1[0] | 0) * 18 + 8 + 2] = v;
+	return v;
+};
 cornerContour_io_ColorTriangles2D.get_cx = function(this1) {
 	return this1[(this1[0] | 0) * 18 + 12 + 2];
 };
@@ -7125,6 +7154,10 @@ cornerContour_io_ColorTriangles2D.get_cy = function(this1) {
 };
 cornerContour_io_ColorTriangles2D.set_cy = function(this1,v) {
 	this1[(this1[0] | 0) * 18 + 13 + 2] = v;
+	return v;
+};
+cornerContour_io_ColorTriangles2D.set_redC = function(this1,v) {
+	this1[(this1[0] | 0) * 18 + 14 + 2] = v;
 	return v;
 };
 cornerContour_io_ColorTriangles2D.triangle = function(this1,ax_,ay_,bx_,by_,cx_,cy_) {
@@ -7153,6 +7186,9 @@ var cornerContour_io_IntIterStart = function(min_,max_) {
 	this.max = max_;
 };
 cornerContour_io_IntIterStart.__name__ = true;
+cornerContour_io_IntIterStart.prototype = {
+	__class__: cornerContour_io_IntIterStart
+};
 var cornerContour_io_TextureTriangles2D = {};
 cornerContour_io_TextureTriangles2D.get_ax = function(this1) {
 	return this1[(this1[0] | 0) * 24 + 2];
@@ -7294,6 +7330,7 @@ cornerContour_web_DivertTrace.prototype = {
 		this.traceString += this.textStyle0 + inf.className + "." + inf.methodName + " ( " + (inf.lineNumber == null ? "null" : "" + inf.lineNumber) + " )" + "</span>" + "<br> - " + this.textStyle1 + Std.string(v) + "</span>" + "<br>";
 		this.traceDiv.innerHTML = this.traceString;
 	}
+	,__class__: cornerContour_web_DivertTrace
 };
 var cornerContour_web_ImageLoader = function(imageNames,loaded_,traceOut) {
 	if(traceOut == null) {
@@ -7380,6 +7417,19 @@ cornerContour_web_ImageLoader.prototype = {
 			}
 		}
 	}
+	,__class__: cornerContour_web_ImageLoader
+};
+var cornerContour_web__$Renderer_Renderer_$ = function(gl,pen,width,height) {
+	this.vertexColor = "vertexColor";
+	this.vertexPosition = "vertexPosition";
+	this.gl = gl;
+	this.pen = pen;
+	this.width = width;
+	this.height = height;
+};
+cornerContour_web__$Renderer_Renderer_$.__name__ = true;
+cornerContour_web__$Renderer_Renderer_$.prototype = {
+	__class__: cornerContour_web__$Renderer_Renderer_$
 };
 var cornerContour_web__$RendererTexture_RendererTexture_$ = function(gl,pen,width,height) {
 	this.hasImage = true;
@@ -7397,6 +7447,9 @@ var cornerContour_web__$RendererTexture_RendererTexture_$ = function(gl,pen,widt
 	this.height = height;
 };
 cornerContour_web__$RendererTexture_RendererTexture_$.__name__ = true;
+cornerContour_web__$RendererTexture_RendererTexture_$.prototype = {
+	__class__: cornerContour_web__$RendererTexture_RendererTexture_$
+};
 var cornerContour_web_RendererTexture = {};
 cornerContour_web_RendererTexture.drawTextureShape = function(this1,range,bgColor) {
 	var gl = this1.gl;
@@ -7539,35 +7592,198 @@ cornerContour_web_Sheet.prototype = {
 		this.gl = this.canvasGL.getContext("webgl",{ premultipliedAlpha : false});
 		this.cx = this.canvas2D.getContext("2d");
 	}
+	,__class__: cornerContour_web_Sheet
 };
 var cornerContourWebGLTest_CornerContourWebGL = function() {
+	this.allRangeTexture = [];
 	this.allRange = [];
+	this.isDown = true;
 	this.divertTrace = new cornerContour_web_DivertTrace();
-	haxe_Log.trace("Contour Test",{ fileName : "src/cornerContourWebGLTest/CornerContourWebGL.hx", lineNumber : 63, className : "cornerContourWebGLTest.CornerContourWebGL", methodName : "new"});
+	haxe_Log.trace("Contour Test",{ fileName : "src/cornerContourWebGLTest/CornerContourWebGL.hx", lineNumber : 73, className : "cornerContourWebGLTest.CornerContourWebGL", methodName : "new"});
 	this.width = 1024;
 	this.height = 768;
 	this.mainSheet = new cornerContour_web_Sheet();
 	this.mainSheet.create(this.width,this.height,true);
 	this.gl = this.mainSheet.gl;
 	this.initContours();
-	this.renderer = new cornerContour_web__$RendererTexture_RendererTexture_$(this.gl,this.pen2D,this.width,this.height);
+	this.renderer = new cornerContour_web__$Renderer_Renderer_$(this.gl,this.pen2D,this.width,this.height);
+	this.rendererTexture = new cornerContour_web__$RendererTexture_RendererTexture_$(this.gl,this.pen2Dtexture,this.width,this.height);
 	this.imageLoader = new cornerContour_web_ImageLoader([],$bind(this,this.setup),true);
 	this.imageLoader.loadEncoded(["data:image/png;base64,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"],["haxeLogo"]);
 };
 cornerContourWebGLTest_CornerContourWebGL.__name__ = true;
 cornerContourWebGLTest_CornerContourWebGL.prototype = {
 	setup: function() {
-		this.renderer.img = this.imageLoader.imageArr[0];
-		haxe_Log.trace(this.renderer.img,{ fileName : "src/cornerContourWebGLTest/CornerContourWebGL.hx", lineNumber : 75, className : "cornerContourWebGLTest.CornerContourWebGL", methodName : "setup"});
-		var this1 = this.renderer;
+		this.rendererTexture.img = this.imageLoader.imageArr[0];
+		haxe_Log.trace(this.rendererTexture.img,{ fileName : "src/cornerContourWebGLTest/CornerContourWebGL.hx", lineNumber : 86, className : "cornerContourWebGLTest.CornerContourWebGL", methodName : "setup"});
+		var this1 = this.rendererTexture;
 		this1.gl.texImage2D(3553,0,6408,6408,5121,this1.img);
-		this.renderer.hasImage = true;
-		this.renderer.transformUVArr = [2.,0.,0.,0.,2.,0.,0.,0.,1.];
+		this.rendererTexture.hasImage = true;
+		this.rendererTexture.transformUVArr = [2.,0.,0.,0.,2.,0.,0.,0.,1.];
 		this.initDraw();
+		var body = window.document.body;
+		body.onmousedown = $bind(this,this.mouseDown);
+		body.onmouseup = $bind(this,this.mouseUp);
+	}
+	,mouseXY: function(e) {
+		var rect = this.mainSheet.canvasGL.getBoundingClientRect();
+		var m = js_Boot.__cast(e , MouseEvent);
+		this.x = m.clientX - rect.left;
+		this.y = m.clientY - rect.top;
+		this.isDown = true;
+	}
+	,mouseDown: function(e) {
+		this.mouseXY(e);
+		var body = window.document.body;
+		body.onmousemove = $bind(this,this.mouseMove);
+	}
+	,mouseMove: function(e) {
+		this.mouseXY(e);
+	}
+	,mouseUp: function(e) {
+		var body = window.document.body;
+		body.onmousemove = null;
+		this.isDown = false;
 	}
 	,initDraw: function() {
-		this.drawing();
-		var this1 = this.renderer;
+		this.allRange = [];
+		this.pen2D.arr[0] = 0;
+		var this1 = [];
+		this1[0] = 0.;
+		var this2 = this1;
+		var this1 = this2;
+		var this2 = this1;
+		this.pen2D.arr = this2;
+		var s = this.pen2D.arr[0] | 0;
+		if(this.isDown) {
+			var pen = this.pen2D;
+			var ax = this.x;
+			var ay = this.y;
+			var pi = Math.PI;
+			var theta = pi / 2;
+			var step = pi * 2 / 36;
+			var bx;
+			var by;
+			var cx;
+			var cy;
+			var _g = 0;
+			var _g1 = 36;
+			while(_g < _g1) {
+				var i = _g++;
+				bx = ax + 5 * Math.sin(theta);
+				by = ay + 5 * Math.cos(theta);
+				theta += step;
+				cx = ax + 5 * Math.sin(theta);
+				cy = ay + 5 * Math.cos(theta);
+				pen.triangle2DFill(ax,ay,bx,by,cx,cy,-65536);
+			}
+		}
+		var tmp = this.allRange;
+		var ii_min = s;
+		var ii_max = this.pen2D.arr[0] - 1 | 0;
+		var this1 = new cornerContour_io_IntIterStart(ii_min,ii_max);
+		tmp.push(this1);
+		this.allRangeTexture = [];
+		this.pen2Dtexture.arr[0] = 0;
+		var this1 = [];
+		this1[0] = 0.;
+		var this2 = this1;
+		var this1 = this2;
+		var this2 = this1;
+		this.pen2Dtexture.arr = this2;
+		var st = this.pen2Dtexture.arr[0] | 0;
+		var _g = 1;
+		while(_g < 80) {
+			var i = _g++;
+			var tmp = 7 * Math.random();
+			this.sketcher.width = tmp + 1.5;
+			var rnd0 = 0.6 * (1 - Math.random() * 2);
+			var rnd1 = 0.6 * (1 - Math.random() * 2);
+			var _this = this.sketcher;
+			var y_ = i * (10 + rnd0);
+			var tmp1;
+			switch(_this.endLine) {
+			case 0:case 1:case 6:case 9:case 12:case 15:case 18:
+				tmp1 = false;
+				break;
+			case 2:case 3:case 4:case 5:case 7:case 8:case 10:case 11:case 13:case 14:case 16:case 17:case 19:case 20:
+				tmp1 = true;
+				break;
+			}
+			if(tmp1) {
+				_this.contour.end(_this.width);
+			}
+			_this.x = 10;
+			_this.y = y_;
+			var l = _this.points.length;
+			_this.points[l] = [];
+			_this.points[l][0] = 10;
+			_this.points[l][1] = y_;
+			_this.pointsClock[_this.pointsClock.length] = _this.contour.pointsClock.slice();
+			_this.pointsAnti[_this.pointsAnti.length] = _this.contour.pointsAnti.slice();
+			_this.dim[_this.dim.length] = { minX : Infinity, maxX : -Infinity, minY : Infinity, maxY : -Infinity};
+			var d = _this.dim[_this.dim.length - 1];
+			if(10 < d.minX) {
+				d.minX = 10;
+			}
+			if(10 > d.maxX) {
+				d.maxX = 10;
+			}
+			if(y_ < d.minY) {
+				d.minY = y_;
+			}
+			if(y_ > d.maxY) {
+				d.maxY = y_;
+			}
+			_this.contour.reset();
+			this.sketcher.lineTo(800,i * (10 + rnd1));
+			var tmp2 = 7 * Math.random();
+			this.sketcher.width = tmp2 + 1.5;
+			var _this1 = this.sketcher;
+			var x_ = i * (10 + rnd0);
+			var tmp3;
+			switch(_this1.endLine) {
+			case 0:case 1:case 6:case 9:case 12:case 15:case 18:
+				tmp3 = false;
+				break;
+			case 2:case 3:case 4:case 5:case 7:case 8:case 10:case 11:case 13:case 14:case 16:case 17:case 19:case 20:
+				tmp3 = true;
+				break;
+			}
+			if(tmp3) {
+				_this1.contour.end(_this1.width);
+			}
+			_this1.x = x_;
+			_this1.y = 10;
+			var l1 = _this1.points.length;
+			_this1.points[l1] = [];
+			_this1.points[l1][0] = x_;
+			_this1.points[l1][1] = 10;
+			_this1.pointsClock[_this1.pointsClock.length] = _this1.contour.pointsClock.slice();
+			_this1.pointsAnti[_this1.pointsAnti.length] = _this1.contour.pointsAnti.slice();
+			_this1.dim[_this1.dim.length] = { minX : Infinity, maxX : -Infinity, minY : Infinity, maxY : -Infinity};
+			var d1 = _this1.dim[_this1.dim.length - 1];
+			if(x_ < d1.minX) {
+				d1.minX = x_;
+			}
+			if(x_ > d1.maxX) {
+				d1.maxX = x_;
+			}
+			if(10 < d1.minY) {
+				d1.minY = 10;
+			}
+			if(10 > d1.maxY) {
+				d1.maxY = 10;
+			}
+			_this1.contour.reset();
+			this.sketcher.lineTo(i * (10 + rnd1),800);
+		}
+		var tmp = this.allRangeTexture;
+		var ii_min = st;
+		var ii_max = this.pen2Dtexture.arr[0] - 1 | 0;
+		var this1 = new cornerContour_io_IntIterStart(ii_min,ii_max);
+		tmp.push(this1);
+		var this1 = this.rendererTexture;
 		var data = this1.pen.arr;
 		this1.totalTriangles = (data.length - 1) / 6 | 0;
 		this1.bufferLength = this1.totalTriangles * 3;
@@ -7643,7 +7859,7 @@ cornerContourWebGLTest_CornerContourWebGL.prototype = {
 			var val14 = cornerContour_io_Array2DTriangles.get_cy(data) / this1.height;
 			this11[(this11[0] | 0) * 24 + 23 + 2] = val14;
 		}
-		var this1 = this.renderer;
+		var this1 = this.rendererTexture;
 		var gl = this1.gl;
 		var program = gl.createProgram();
 		var shader = gl.createShader(35633);
@@ -7802,7 +8018,184 @@ cornerContourWebGLTest_CornerContourWebGL.prototype = {
 		cornerContour_web_RendererTexture.modeEnable(this1);
 		var this2 = this1.arrData;
 		this1.currData = this2.subarray(2,(this2[1] | 0) * 24 + 2);
-		cornerContour_web_RendererTexture.modeEnable(this.renderer);
+		cornerContour_web_RendererTexture.modeEnable(this.rendererTexture);
+		var this1 = this.renderer;
+		var data = this1.pen.arr;
+		this1.totalTriangles = (data.length - 1) / 7 | 0;
+		this1.bufferLength = this1.totalTriangles * 3;
+		this1.triSize = 18;
+		this1.len = this1.totalTriangles * this1.triSize | 0;
+		var this2 = new Float32Array(this1.len + 2);
+		var this3 = this2;
+		this3[0] = 0.;
+		this3[1] = 0.;
+		var this2 = this3;
+		var this3 = this2;
+		var this2 = this3;
+		this1.arrData = this2;
+		var _g = 0;
+		var _g1 = this1.totalTriangles;
+		while(_g < _g1) {
+			var i = _g++;
+			this1.pen.arr[0] = i;
+			var this2 = this1.arrData;
+			this2[0] = i;
+			if(this2[0] > this2[1] - 1) {
+				this2[1] = this2[0];
+			}
+			var this3 = this1.arrData;
+			var col = cornerContour_io_Array2DTriangles.get_color(data) | 0;
+			cornerContour_io_ColorTriangles2D.set_redA(this3,(col >> 16 & 255) / 255);
+			var v = (col & 255) / 255;
+			this3[(this3[0] | 0) * 18 + 4 + 2] = v;
+			var v1 = (col >> 8 & 255) / 255;
+			this3[(this3[0] | 0) * 18 + 3 + 2] = v1;
+			var v2 = (col >> 24 & 255) / 255;
+			this3[(this3[0] | 0) * 18 + 5 + 2] = v2;
+			cornerContour_io_ColorTriangles2D.set_redB(this3,(col >> 16 & 255) / 255);
+			var v3 = (col & 255) / 255;
+			this3[(this3[0] | 0) * 18 + 10 + 2] = v3;
+			var v4 = (col >> 8 & 255) / 255;
+			this3[(this3[0] | 0) * 18 + 9 + 2] = v4;
+			var v5 = (col >> 24 & 255) / 255;
+			this3[(this3[0] | 0) * 18 + 11 + 2] = v5;
+			cornerContour_io_ColorTriangles2D.set_redC(this3,(col >> 16 & 255) / 255);
+			var v6 = (col & 255) / 255;
+			this3[(this3[0] | 0) * 18 + 16 + 2] = v6;
+			var v7 = (col >> 8 & 255) / 255;
+			this3[(this3[0] | 0) * 18 + 15 + 2] = v7;
+			var v8 = (col >> 24 & 255) / 255;
+			this3[(this3[0] | 0) * 18 + 17 + 2] = v8;
+			cornerContour_io_ColorTriangles2D.set_ax(this1.arrData,-(1 - 2 * cornerContour_io_Array2DTriangles.get_ax(data) / this1.width));
+			cornerContour_io_ColorTriangles2D.set_ay(this1.arrData,1 - 2 * cornerContour_io_Array2DTriangles.get_ay(data) / this1.height);
+			cornerContour_io_ColorTriangles2D.set_bx(this1.arrData,-(1 - 2 * cornerContour_io_Array2DTriangles.get_bx(data) / this1.width));
+			cornerContour_io_ColorTriangles2D.set_by(this1.arrData,1 - 2 * cornerContour_io_Array2DTriangles.get_by(data) / this1.height);
+			cornerContour_io_ColorTriangles2D.set_cx(this1.arrData,-(1 - 2 * cornerContour_io_Array2DTriangles.get_cx(data) / this1.width));
+			cornerContour_io_ColorTriangles2D.set_cy(this1.arrData,1 - 2 * cornerContour_io_Array2DTriangles.get_cy(data) / this1.height);
+		}
+		var this1 = this.renderer;
+		var gl = this1.gl;
+		var program = gl.createProgram();
+		var shader = gl.createShader(35633);
+		gl.shaderSource(shader,"attribute vec2 vertexPosition;" + "attribute vec4 vertexColor;" + "varying vec4 vcol;" + "void main(void) {" + " gl_Position = vec4(vertexPosition, .0, 1.0);" + " vcol = vertexColor;" + "}");
+		gl.compileShader(shader);
+		var tmp;
+		if(!gl.getShaderParameter(shader,35713)) {
+			throw haxe_Exception.thrown("Error compiling shader. " + gl.getShaderInfoLog(shader));
+		} else {
+			tmp = shader;
+		}
+		gl.attachShader(program,tmp);
+		var shader = gl.createShader(35632);
+		gl.shaderSource(shader,"precision mediump float;" + "varying vec4 vcol;" + "void main(void) {" + "vec4 color = vec4(vcol.rgb, 1. );" + "color *= vcol.a; " + "gl_FragColor = color;" + "}");
+		gl.compileShader(shader);
+		var tmp;
+		if(!gl.getShaderParameter(shader,35713)) {
+			throw haxe_Exception.thrown("Error compiling shader. " + gl.getShaderInfoLog(shader));
+		} else {
+			tmp = shader;
+		}
+		gl.attachShader(program,tmp);
+		gl.linkProgram(program);
+		var tmp;
+		if(!gl.getProgramParameter(program,35714)) {
+			throw haxe_Exception.thrown("Error linking program. " + gl.getProgramInfoLog(program));
+		} else {
+			gl.validateProgram(program);
+			if(!gl.getProgramParameter(program,35715)) {
+				throw haxe_Exception.thrown("Error validating program. " + gl.getProgramInfoLog(program));
+			} else {
+				gl.useProgram(program);
+				tmp = program;
+			}
+		}
+		this1.program = tmp;
+		this1.gl.bindBuffer(34962,null);
+		this1.gl.useProgram(this1.program);
+		var this2 = this1.arrData;
+		var arr = this2.subarray(2,(this2[1] | 0) * 18 + 2);
+		var gl = this1.gl;
+		var program = this1.program;
+		var xyName = this1.vertexPosition;
+		var rgbaName = this1.vertexColor;
+		var isDynamic = true;
+		if(isDynamic == null) {
+			isDynamic = false;
+		}
+		var isDynamic1 = isDynamic;
+		if(isDynamic1 == null) {
+			isDynamic1 = false;
+		}
+		var buf = gl.createBuffer();
+		var staticDraw = 35044;
+		var dynamicDraw = 35048;
+		var arrayBuffer = 34962;
+		gl.bindBuffer(arrayBuffer,buf);
+		if(isDynamic1) {
+			var arrayBuffer = 34962;
+			gl.bufferData(arrayBuffer,arr,dynamicDraw);
+		} else {
+			var arrayBuffer = 34962;
+			gl.bufferData(arrayBuffer,arr,staticDraw);
+		}
+		var vbo = buf;
+		var inp = gl.getAttribLocation(program,xyName);
+		var elementBytes = 4;
+		var fp = 5126;
+		var strideBytes = 6 * elementBytes;
+		var offBytes = 0 * elementBytes;
+		gl.vertexAttribPointer(inp,2,fp,false,strideBytes,offBytes);
+		gl.enableVertexAttribArray(inp);
+		var inp = gl.getAttribLocation(program,rgbaName);
+		var elementBytes = 4;
+		var fp = 5126;
+		var strideBytes = 6 * elementBytes;
+		var offBytes = 2 * elementBytes;
+		gl.vertexAttribPointer(inp,4,fp,false,strideBytes,offBytes);
+		gl.enableVertexAttribArray(inp);
+		this1.buf = vbo;
+		this1.gl.bindBuffer(34962,this1.buf);
+		this1.gl.useProgram(this1.program);
+		var gl = this1.gl;
+		var program = this1.program;
+		var rgbaName = this1.vertexColor;
+		var inp = gl.getAttribLocation(program,this1.vertexPosition);
+		var elementBytes = 4;
+		var fp = 5126;
+		var strideBytes = 6 * elementBytes;
+		var offBytes = 0 * elementBytes;
+		gl.vertexAttribPointer(inp,2,fp,false,strideBytes,offBytes);
+		gl.enableVertexAttribArray(inp);
+		var inp = gl.getAttribLocation(program,rgbaName);
+		var elementBytes = 4;
+		var fp = 5126;
+		var strideBytes = 6 * elementBytes;
+		var offBytes = 2 * elementBytes;
+		gl.vertexAttribPointer(inp,4,fp,false,strideBytes,offBytes);
+		gl.enableVertexAttribArray(inp);
+		this1.gl.bindBuffer(34962,this1.buf);
+		var this2 = this1.arrData;
+		this1.currData = this2.subarray(2,(this2[1] | 0) * 18 + 2);
+		var this1 = this.renderer;
+		this1.gl.useProgram(this1.program);
+		this1.gl.bindBuffer(34962,this1.buf);
+		var gl = this1.gl;
+		var program = this1.program;
+		var rgbaName = this1.vertexColor;
+		var inp = gl.getAttribLocation(program,this1.vertexPosition);
+		var elementBytes = 4;
+		var fp = 5126;
+		var strideBytes = 6 * elementBytes;
+		var offBytes = 0 * elementBytes;
+		gl.vertexAttribPointer(inp,2,fp,false,strideBytes,offBytes);
+		gl.enableVertexAttribArray(inp);
+		var inp = gl.getAttribLocation(program,rgbaName);
+		var elementBytes = 4;
+		var fp = 5126;
+		var strideBytes = 6 * elementBytes;
+		var offBytes = 2 * elementBytes;
+		gl.vertexAttribPointer(inp,4,fp,false,strideBytes,offBytes);
+		gl.enableVertexAttribArray(inp);
 		var _gthis = this;
 		if(htmlHelper_tools_AnimateTimer.s == null) {
 			htmlHelper_tools_AnimateTimer.s = window.document.createElement("style");
@@ -7838,8 +8231,145 @@ cornerContourWebGLTest_CornerContourWebGL.prototype = {
 			gl.enable(3042);
 			gl.blendFunc(1,771);
 			gl.enable(2884);
-			_gthis.drawing();
-			var this1 = _gthis.renderer;
+			_gthis.allRangeTexture = [];
+			_gthis.pen2Dtexture.arr[0] = 0;
+			var this1 = [];
+			this1[0] = 0.;
+			var this2 = this1;
+			var this1 = this2;
+			var this2 = this1;
+			_gthis.pen2Dtexture.arr = this2;
+			var st = _gthis.pen2Dtexture.arr[0] | 0;
+			var _g = 1;
+			while(_g < 80) {
+				var i = _g++;
+				var tmp = 7 * Math.random();
+				_gthis.sketcher.width = tmp + 1.5;
+				var rnd0 = 0.6 * (1 - Math.random() * 2);
+				var rnd1 = 0.6 * (1 - Math.random() * 2);
+				var _this = _gthis.sketcher;
+				var y_ = i * (10 + rnd0);
+				var tmp1;
+				switch(_this.endLine) {
+				case 0:case 1:case 6:case 9:case 12:case 15:case 18:
+					tmp1 = false;
+					break;
+				case 2:case 3:case 4:case 5:case 7:case 8:case 10:case 11:case 13:case 14:case 16:case 17:case 19:case 20:
+					tmp1 = true;
+					break;
+				}
+				if(tmp1) {
+					_this.contour.end(_this.width);
+				}
+				_this.x = 10;
+				_this.y = y_;
+				var l = _this.points.length;
+				_this.points[l] = [];
+				_this.points[l][0] = 10;
+				_this.points[l][1] = y_;
+				_this.pointsClock[_this.pointsClock.length] = _this.contour.pointsClock.slice();
+				_this.pointsAnti[_this.pointsAnti.length] = _this.contour.pointsAnti.slice();
+				_this.dim[_this.dim.length] = { minX : Infinity, maxX : -Infinity, minY : Infinity, maxY : -Infinity};
+				var d = _this.dim[_this.dim.length - 1];
+				if(10 < d.minX) {
+					d.minX = 10;
+				}
+				if(10 > d.maxX) {
+					d.maxX = 10;
+				}
+				if(y_ < d.minY) {
+					d.minY = y_;
+				}
+				if(y_ > d.maxY) {
+					d.maxY = y_;
+				}
+				_this.contour.reset();
+				_gthis.sketcher.lineTo(800,i * (10 + rnd1));
+				var tmp2 = 7 * Math.random();
+				_gthis.sketcher.width = tmp2 + 1.5;
+				var _this1 = _gthis.sketcher;
+				var x_ = i * (10 + rnd0);
+				var tmp3;
+				switch(_this1.endLine) {
+				case 0:case 1:case 6:case 9:case 12:case 15:case 18:
+					tmp3 = false;
+					break;
+				case 2:case 3:case 4:case 5:case 7:case 8:case 10:case 11:case 13:case 14:case 16:case 17:case 19:case 20:
+					tmp3 = true;
+					break;
+				}
+				if(tmp3) {
+					_this1.contour.end(_this1.width);
+				}
+				_this1.x = x_;
+				_this1.y = 10;
+				var l1 = _this1.points.length;
+				_this1.points[l1] = [];
+				_this1.points[l1][0] = x_;
+				_this1.points[l1][1] = 10;
+				_this1.pointsClock[_this1.pointsClock.length] = _this1.contour.pointsClock.slice();
+				_this1.pointsAnti[_this1.pointsAnti.length] = _this1.contour.pointsAnti.slice();
+				_this1.dim[_this1.dim.length] = { minX : Infinity, maxX : -Infinity, minY : Infinity, maxY : -Infinity};
+				var d1 = _this1.dim[_this1.dim.length - 1];
+				if(x_ < d1.minX) {
+					d1.minX = x_;
+				}
+				if(x_ > d1.maxX) {
+					d1.maxX = x_;
+				}
+				if(10 < d1.minY) {
+					d1.minY = 10;
+				}
+				if(10 > d1.maxY) {
+					d1.maxY = 10;
+				}
+				_this1.contour.reset();
+				_gthis.sketcher.lineTo(i * (10 + rnd1),800);
+			}
+			var _gthis1 = _gthis.allRangeTexture;
+			var ii_min = st;
+			var ii_max = _gthis.pen2Dtexture.arr[0] - 1 | 0;
+			var this1 = new cornerContour_io_IntIterStart(ii_min,ii_max);
+			_gthis1.push(this1);
+			_gthis.allRange = [];
+			_gthis.pen2D.arr[0] = 0;
+			var this1 = [];
+			this1[0] = 0.;
+			var this2 = this1;
+			var this1 = this2;
+			var this2 = this1;
+			_gthis.pen2D.arr = this2;
+			var s = _gthis.pen2D.arr[0] | 0;
+			if(_gthis.isDown) {
+				var pen = _gthis.pen2D;
+				var ax = _gthis.x;
+				var ay = _gthis.y;
+				var pi = Math.PI;
+				var theta = pi / 2;
+				var step = pi * 2 / 36;
+				var bx;
+				var by;
+				var cx;
+				var cy;
+				var _g = 0;
+				var _g1 = 36;
+				while(_g < _g1) {
+					var i = _g++;
+					bx = ax + 5 * Math.sin(theta);
+					by = ay + 5 * Math.cos(theta);
+					theta += step;
+					cx = ax + 5 * Math.sin(theta);
+					cy = ay + 5 * Math.cos(theta);
+					pen.triangle2DFill(ax,ay,bx,by,cx,cy,-65536);
+				}
+			}
+			var _gthis1 = _gthis.allRange;
+			var ii_min = s;
+			var ii_max = _gthis.pen2D.arr[0] - 1 | 0;
+			var this1 = new cornerContour_io_IntIterStart(ii_min,ii_max);
+			_gthis1.push(this1);
+			cornerContour_web_RendererTexture.modeEnable(_gthis.rendererTexture);
+			var this1 = _gthis.rendererTexture;
 			var data = this1.pen.arr;
 			this1.totalTriangles = (data.length - 1) / 6 | 0;
 			this1.bufferLength = this1.totalTriangles * 3;
@@ -7915,122 +8445,110 @@ cornerContourWebGLTest_CornerContourWebGL.prototype = {
 				var val14 = cornerContour_io_Array2DTriangles.get_cy(data) / this1.height;
 				this11[(this11[0] | 0) * 24 + 23 + 2] = val14;
 			}
-			var this1 = _gthis.renderer;
+			var this1 = _gthis.rendererTexture;
 			var this2 = this1.arrData;
 			this1.currData = this2.subarray(2,(this2[1] | 0) * 24 + 2);
-			var _gthis1 = _gthis.renderer;
-			var ii_min = _gthis.allRange[0].start;
-			var ii_max = _gthis.allRange[0].max;
+			var _gthis1 = _gthis.rendererTexture;
+			var ii_min = _gthis.allRangeTexture[0].start;
+			var ii_max = _gthis.allRangeTexture[0].max;
 			var this1 = new cornerContour_io_IntIterStart(ii_min,ii_max);
 			cornerContour_web_RendererTexture.drawTextureShape(_gthis1,this1,16777215);
+			var this1 = _gthis.renderer;
+			this1.gl.useProgram(this1.program);
+			this1.gl.bindBuffer(34962,this1.buf);
+			var gl = this1.gl;
+			var program = this1.program;
+			var rgbaName = this1.vertexColor;
+			var inp = gl.getAttribLocation(program,this1.vertexPosition);
+			var elementBytes = 4;
+			var fp = 5126;
+			var strideBytes = 6 * elementBytes;
+			var offBytes = 0 * elementBytes;
+			gl.vertexAttribPointer(inp,2,fp,false,strideBytes,offBytes);
+			gl.enableVertexAttribArray(inp);
+			var inp = gl.getAttribLocation(program,rgbaName);
+			var elementBytes = 4;
+			var fp = 5126;
+			var strideBytes = 6 * elementBytes;
+			var offBytes = 2 * elementBytes;
+			gl.vertexAttribPointer(inp,4,fp,false,strideBytes,offBytes);
+			gl.enableVertexAttribArray(inp);
+			var this1 = _gthis.renderer;
+			var data = this1.pen.arr;
+			this1.totalTriangles = (data.length - 1) / 7 | 0;
+			this1.bufferLength = this1.totalTriangles * 3;
+			this1.triSize = 18;
+			this1.len = this1.totalTriangles * this1.triSize | 0;
+			var this2 = new Float32Array(this1.len + 2);
+			var this3 = this2;
+			this3[0] = 0.;
+			this3[1] = 0.;
+			var this2 = this3;
+			var this3 = this2;
+			var this2 = this3;
+			this1.arrData = this2;
+			var _g = 0;
+			var _g1 = this1.totalTriangles;
+			while(_g < _g1) {
+				var i = _g++;
+				this1.pen.arr[0] = i;
+				var this2 = this1.arrData;
+				this2[0] = i;
+				if(this2[0] > this2[1] - 1) {
+					this2[1] = this2[0];
+				}
+				var this3 = this1.arrData;
+				var col = cornerContour_io_Array2DTriangles.get_color(data) | 0;
+				cornerContour_io_ColorTriangles2D.set_redA(this3,(col >> 16 & 255) / 255);
+				var v = (col & 255) / 255;
+				this3[(this3[0] | 0) * 18 + 4 + 2] = v;
+				var v1 = (col >> 8 & 255) / 255;
+				this3[(this3[0] | 0) * 18 + 3 + 2] = v1;
+				var v2 = (col >> 24 & 255) / 255;
+				this3[(this3[0] | 0) * 18 + 5 + 2] = v2;
+				cornerContour_io_ColorTriangles2D.set_redB(this3,(col >> 16 & 255) / 255);
+				var v3 = (col & 255) / 255;
+				this3[(this3[0] | 0) * 18 + 10 + 2] = v3;
+				var v4 = (col >> 8 & 255) / 255;
+				this3[(this3[0] | 0) * 18 + 9 + 2] = v4;
+				var v5 = (col >> 24 & 255) / 255;
+				this3[(this3[0] | 0) * 18 + 11 + 2] = v5;
+				cornerContour_io_ColorTriangles2D.set_redC(this3,(col >> 16 & 255) / 255);
+				var v6 = (col & 255) / 255;
+				this3[(this3[0] | 0) * 18 + 16 + 2] = v6;
+				var v7 = (col >> 8 & 255) / 255;
+				this3[(this3[0] | 0) * 18 + 15 + 2] = v7;
+				var v8 = (col >> 24 & 255) / 255;
+				this3[(this3[0] | 0) * 18 + 17 + 2] = v8;
+				cornerContour_io_ColorTriangles2D.set_ax(this1.arrData,-(1 - 2 * cornerContour_io_Array2DTriangles.get_ax(data) / this1.width));
+				cornerContour_io_ColorTriangles2D.set_ay(this1.arrData,1 - 2 * cornerContour_io_Array2DTriangles.get_ay(data) / this1.height);
+				cornerContour_io_ColorTriangles2D.set_bx(this1.arrData,-(1 - 2 * cornerContour_io_Array2DTriangles.get_bx(data) / this1.width));
+				cornerContour_io_ColorTriangles2D.set_by(this1.arrData,1 - 2 * cornerContour_io_Array2DTriangles.get_by(data) / this1.height);
+				cornerContour_io_ColorTriangles2D.set_cx(this1.arrData,-(1 - 2 * cornerContour_io_Array2DTriangles.get_cx(data) / this1.width));
+				cornerContour_io_ColorTriangles2D.set_cy(this1.arrData,1 - 2 * cornerContour_io_Array2DTriangles.get_cy(data) / this1.height);
+			}
+			var this1 = _gthis.renderer;
+			var this2 = this1.arrData;
+			this1.currData = this2.subarray(2,(this2[1] | 0) * 18 + 2);
+			var this1 = _gthis.renderer;
+			var ii_min = _gthis.allRange[0].start;
+			var ii_max = _gthis.allRange[0].max;
+			var this2 = new cornerContour_io_IntIterStart(ii_min,ii_max);
+			var range = this2;
+			var partData = this1.currData.subarray(range.start * this1.triSize,range.max * this1.triSize);
+			this1.gl.bufferSubData(34962,0,partData);
+			this1.gl.useProgram(this1.program);
+			this1.gl.drawArrays(4,0,(range.max - range.start) * 3 | 0);
 		};
 	}
 	,initContours: function() {
 		this.pen2D = new cornerContour_Pen2D(-1);
 		this.pen2D.currentColor = -1;
-		this.sketcher = new cornerContour_Sketcher(this.pen2D,4,0);
+		this.pen2Dtexture = new cornerContour_Pen2D(-1);
+		this.pen2Dtexture.currentColor = -1;
+		this.sketcher = new cornerContour_Sketcher(this.pen2Dtexture,4,0);
 	}
-	,drawing: function() {
-		this.pen2D.arr[0] = 0;
-		var this1 = [];
-		this1[0] = 0.;
-		var this2 = this1;
-		var this1 = this2;
-		var this2 = this1;
-		this.pen2D.arr = this2;
-		var s = this.pen2D.arr[0] | 0;
-		var _g = 1;
-		while(_g < 80) {
-			var i = _g++;
-			var tmp = 7 * Math.random();
-			this.sketcher.width = tmp + 1.5;
-			var rnd0 = 0.6 * (1 - Math.random() * 2);
-			var rnd1 = 0.6 * (1 - Math.random() * 2);
-			var _this = this.sketcher;
-			var y_ = i * (10 + rnd0);
-			var tmp1;
-			switch(_this.endLine) {
-			case 0:case 1:case 6:case 9:case 12:case 15:case 18:
-				tmp1 = false;
-				break;
-			case 2:case 3:case 4:case 5:case 7:case 8:case 10:case 11:case 13:case 14:case 16:case 17:case 19:case 20:
-				tmp1 = true;
-				break;
-			}
-			if(tmp1) {
-				_this.contour.end(_this.width);
-			}
-			_this.x = 10;
-			_this.y = y_;
-			var l = _this.points.length;
-			_this.points[l] = [];
-			_this.points[l][0] = 10;
-			_this.points[l][1] = y_;
-			_this.pointsClock[_this.pointsClock.length] = _this.contour.pointsClock.slice();
-			_this.pointsAnti[_this.pointsAnti.length] = _this.contour.pointsAnti.slice();
-			_this.dim[_this.dim.length] = { minX : Infinity, maxX : -Infinity, minY : Infinity, maxY : -Infinity};
-			var d = _this.dim[_this.dim.length - 1];
-			if(10 < d.minX) {
-				d.minX = 10;
-			}
-			if(10 > d.maxX) {
-				d.maxX = 10;
-			}
-			if(y_ < d.minY) {
-				d.minY = y_;
-			}
-			if(y_ > d.maxY) {
-				d.maxY = y_;
-			}
-			_this.contour.reset();
-			this.sketcher.lineTo(800,i * (10 + rnd1));
-			var tmp2 = 7 * Math.random();
-			this.sketcher.width = tmp2 + 1.5;
-			var _this1 = this.sketcher;
-			var x_ = i * (10 + rnd0);
-			var tmp3;
-			switch(_this1.endLine) {
-			case 0:case 1:case 6:case 9:case 12:case 15:case 18:
-				tmp3 = false;
-				break;
-			case 2:case 3:case 4:case 5:case 7:case 8:case 10:case 11:case 13:case 14:case 16:case 17:case 19:case 20:
-				tmp3 = true;
-				break;
-			}
-			if(tmp3) {
-				_this1.contour.end(_this1.width);
-			}
-			_this1.x = x_;
-			_this1.y = 10;
-			var l1 = _this1.points.length;
-			_this1.points[l1] = [];
-			_this1.points[l1][0] = x_;
-			_this1.points[l1][1] = 10;
-			_this1.pointsClock[_this1.pointsClock.length] = _this1.contour.pointsClock.slice();
-			_this1.pointsAnti[_this1.pointsAnti.length] = _this1.contour.pointsAnti.slice();
-			_this1.dim[_this1.dim.length] = { minX : Infinity, maxX : -Infinity, minY : Infinity, maxY : -Infinity};
-			var d1 = _this1.dim[_this1.dim.length - 1];
-			if(x_ < d1.minX) {
-				d1.minX = x_;
-			}
-			if(x_ > d1.maxX) {
-				d1.maxX = x_;
-			}
-			if(10 < d1.minY) {
-				d1.minY = 10;
-			}
-			if(10 > d1.maxY) {
-				d1.maxY = 10;
-			}
-			_this1.contour.reset();
-			this.sketcher.lineTo(i * (10 + rnd1),800);
-		}
-		var tmp = this.allRange;
-		var ii_min = s;
-		var ii_max = this.pen2D.arr[0] - 1 | 0;
-		var this1 = new cornerContour_io_IntIterStart(ii_min,ii_max);
-		tmp.push(this1);
-	}
+	,__class__: cornerContourWebGLTest_CornerContourWebGL
 };
 function cornerContourWebGLTest_CornerContourWebGL_main() {
 	new cornerContourWebGLTest_CornerContourWebGL();
@@ -8043,6 +8561,9 @@ var fracs_DifferencePreference = $hxEnums["fracs.DifferencePreference"] = { __en
 	,SMALL_OLD: {_hx_name:"SMALL_OLD",_hx_index:4,__enum__:"fracs.DifferencePreference",toString:$estr}
 };
 fracs_DifferencePreference.__constructs__ = [fracs_DifferencePreference.CLOCKWISE,fracs_DifferencePreference.ANTICLOCKWISE,fracs_DifferencePreference.SMALL,fracs_DifferencePreference.LARGE,fracs_DifferencePreference.SMALL_OLD];
+var haxe_IMap = function() { };
+haxe_IMap.__name__ = true;
+haxe_IMap.__isInterface__ = true;
 var haxe_Exception = function(message,previous,native) {
 	Error.call(this,message);
 	this.message = message;
@@ -8065,6 +8586,7 @@ haxe_Exception.prototype = $extend(Error.prototype,{
 	get_native: function() {
 		return this.__nativeException;
 	}
+	,__class__: haxe_Exception
 });
 var haxe_Log = function() { };
 haxe_Log.__name__ = true;
@@ -8098,6 +8620,7 @@ var haxe_ValueException = function(value,previous,native) {
 haxe_ValueException.__name__ = true;
 haxe_ValueException.__super__ = haxe_Exception;
 haxe_ValueException.prototype = $extend(haxe_Exception.prototype,{
+	__class__: haxe_ValueException
 });
 var haxe_ds_Either = $hxEnums["haxe.ds.Either"] = { __ename__:true,__constructs__:null
 	,Left: ($_=function(v) { return {_hx_index:0,v:v,__enum__:"haxe.ds.Either",toString:$estr}; },$_._hx_name="Left",$_.__params__ = ["v"],$_)
@@ -8108,6 +8631,10 @@ var haxe_ds_StringMap = function() {
 	this.h = Object.create(null);
 };
 haxe_ds_StringMap.__name__ = true;
+haxe_ds_StringMap.__interfaces__ = [haxe_IMap];
+haxe_ds_StringMap.prototype = {
+	__class__: haxe_ds_StringMap
+};
 var haxe_iterators_ArrayIterator = function(array) {
 	this.current = 0;
 	this.array = array;
@@ -8120,6 +8647,7 @@ haxe_iterators_ArrayIterator.prototype = {
 	,next: function() {
 		return this.array[this.current++];
 	}
+	,__class__: haxe_iterators_ArrayIterator
 };
 var htmlHelper_tools_AnimateTimer = function() { };
 htmlHelper_tools_AnimateTimer.__name__ = true;
@@ -8133,6 +8661,23 @@ htmlHelper_tools_AnimateTimer.loop = function(tim) {
 };
 var js_Boot = function() { };
 js_Boot.__name__ = true;
+js_Boot.getClass = function(o) {
+	if(o == null) {
+		return null;
+	} else if(((o) instanceof Array)) {
+		return Array;
+	} else {
+		var cl = o.__class__;
+		if(cl != null) {
+			return cl;
+		}
+		var name = js_Boot.__nativeClassName(o);
+		if(name != null) {
+			return js_Boot.__resolveNativeClass(name);
+		}
+		return null;
+	}
+};
 js_Boot.__string_rec = function(o,s) {
 	if(o == null) {
 		return "null";
@@ -8225,10 +8770,114 @@ js_Boot.__string_rec = function(o,s) {
 		return String(o);
 	}
 };
+js_Boot.__interfLoop = function(cc,cl) {
+	if(cc == null) {
+		return false;
+	}
+	if(cc == cl) {
+		return true;
+	}
+	var intf = cc.__interfaces__;
+	if(intf != null) {
+		var _g = 0;
+		var _g1 = intf.length;
+		while(_g < _g1) {
+			var i = _g++;
+			var i1 = intf[i];
+			if(i1 == cl || js_Boot.__interfLoop(i1,cl)) {
+				return true;
+			}
+		}
+	}
+	return js_Boot.__interfLoop(cc.__super__,cl);
+};
+js_Boot.__instanceof = function(o,cl) {
+	if(cl == null) {
+		return false;
+	}
+	switch(cl) {
+	case Array:
+		return ((o) instanceof Array);
+	case Bool:
+		return typeof(o) == "boolean";
+	case Dynamic:
+		return o != null;
+	case Float:
+		return typeof(o) == "number";
+	case Int:
+		if(typeof(o) == "number") {
+			return ((o | 0) === o);
+		} else {
+			return false;
+		}
+		break;
+	case String:
+		return typeof(o) == "string";
+	default:
+		if(o != null) {
+			if(typeof(cl) == "function") {
+				if(js_Boot.__downcastCheck(o,cl)) {
+					return true;
+				}
+			} else if(typeof(cl) == "object" && js_Boot.__isNativeObj(cl)) {
+				if(((o) instanceof cl)) {
+					return true;
+				}
+			}
+		} else {
+			return false;
+		}
+		if(cl == Class ? o.__name__ != null : false) {
+			return true;
+		}
+		if(cl == Enum ? o.__ename__ != null : false) {
+			return true;
+		}
+		return o.__enum__ != null ? $hxEnums[o.__enum__] == cl : false;
+	}
+};
+js_Boot.__downcastCheck = function(o,cl) {
+	if(!((o) instanceof cl)) {
+		if(cl.__isInterface__) {
+			return js_Boot.__interfLoop(js_Boot.getClass(o),cl);
+		} else {
+			return false;
+		}
+	} else {
+		return true;
+	}
+};
+js_Boot.__cast = function(o,t) {
+	if(o == null || js_Boot.__instanceof(o,t)) {
+		return o;
+	} else {
+		throw haxe_Exception.thrown("Cannot cast " + Std.string(o) + " to " + Std.string(t));
+	}
+};
+js_Boot.__nativeClassName = function(o) {
+	var name = js_Boot.__toStr.call(o).slice(8,-1);
+	if(name == "Object" || name == "Function" || name == "Math" || name == "JSON") {
+		return null;
+	}
+	return name;
+};
+js_Boot.__isNativeObj = function(o) {
+	return js_Boot.__nativeClassName(o) != null;
+};
+js_Boot.__resolveNativeClass = function(name) {
+	return $global[name];
+};
 function $bind(o,m) { if( m == null ) return null; if( m.__id__ == null ) m.__id__ = $global.$haxeUID++; var f; if( o.hx__closures__ == null ) o.hx__closures__ = {}; else f = o.hx__closures__[m.__id__]; if( f == null ) { f = m.bind(o); o.hx__closures__[m.__id__] = f; } return f; }
 $global.$haxeUID |= 0;
+String.prototype.__class__ = String;
 String.__name__ = true;
 Array.__name__ = true;
+var Int = { };
+var Dynamic = { };
+var Float = Number;
+var Bool = Boolean;
+var Class = { };
+var Enum = { };
 js_Boot.__toStr = ({ }).toString;
 htmlHelper_tools_AnimateTimer.counter = 0;
 cornerContourWebGLTest_CornerContourWebGL_main();
