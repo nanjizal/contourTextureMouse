@@ -7528,6 +7528,7 @@ cornerContour_web_RendererTexture.modeEnable = function(this1) {
 	gl.enableVertexAttribArray(inp);
 };
 var cornerContour_web_Sheet = function() {
+	this.isDown = true;
 };
 cornerContour_web_Sheet.__name__ = true;
 cornerContour_web_Sheet.prototype = {
@@ -7592,12 +7593,31 @@ cornerContour_web_Sheet.prototype = {
 		this.gl = this.canvasGL.getContext("webgl",{ premultipliedAlpha : false});
 		this.cx = this.canvas2D.getContext("2d");
 	}
+	,mouseXY: function(e) {
+		var rect = this.canvasGL.getBoundingClientRect();
+		var m = js_Boot.__cast(e , MouseEvent);
+		this.mouseX = m.clientX - rect.left;
+		this.mouseY = m.clientY - rect.top;
+		this.isDown = true;
+	}
+	,mouseDown: function(e) {
+		this.mouseXY(e);
+		var body = window.document.body;
+		body.onmousemove = $bind(this,this.mouseMove);
+	}
+	,mouseMove: function(e) {
+		this.mouseXY(e);
+	}
+	,mouseUp: function(e) {
+		var body = window.document.body;
+		body.onmousemove = null;
+		this.isDown = false;
+	}
 	,__class__: cornerContour_web_Sheet
 };
 var cornerContourWebGLTest_CornerContourWebGL = function() {
 	this.allRangeTexture = [];
 	this.allRange = [];
-	this.isDown = true;
 	this.divertTrace = new cornerContour_web_DivertTrace();
 	haxe_Log.trace("Contour Test",{ fileName : "src/cornerContourWebGLTest/CornerContourWebGL.hx", lineNumber : 73, className : "cornerContourWebGLTest.CornerContourWebGL", methodName : "new"});
 	this.width = 1024;
@@ -7621,29 +7641,6 @@ cornerContourWebGLTest_CornerContourWebGL.prototype = {
 		this.rendererTexture.hasImage = true;
 		this.rendererTexture.transformUVArr = [2.,0.,0.,0.,2.,0.,0.,0.,1.];
 		this.initDraw();
-		var body = window.document.body;
-		body.onmousedown = $bind(this,this.mouseDown);
-		body.onmouseup = $bind(this,this.mouseUp);
-	}
-	,mouseXY: function(e) {
-		var rect = this.mainSheet.canvasGL.getBoundingClientRect();
-		var m = js_Boot.__cast(e , MouseEvent);
-		this.x = m.clientX - rect.left;
-		this.y = m.clientY - rect.top;
-		this.isDown = true;
-	}
-	,mouseDown: function(e) {
-		this.mouseXY(e);
-		var body = window.document.body;
-		body.onmousemove = $bind(this,this.mouseMove);
-	}
-	,mouseMove: function(e) {
-		this.mouseXY(e);
-	}
-	,mouseUp: function(e) {
-		var body = window.document.body;
-		body.onmousemove = null;
-		this.isDown = false;
 	}
 	,initDraw: function() {
 		this.allRange = [];
@@ -7655,10 +7652,10 @@ cornerContourWebGLTest_CornerContourWebGL.prototype = {
 		var this2 = this1;
 		this.pen2D.arr = this2;
 		var s = this.pen2D.arr[0] | 0;
-		if(this.isDown) {
+		if(this.mainSheet.isDown) {
 			var pen = this.pen2D;
-			var ax = this.x;
-			var ay = this.y;
+			var ax = this.mainSheet.mouseX;
+			var ay = this.mainSheet.mouseY;
 			var pi = Math.PI;
 			var theta = pi / 2;
 			var step = pi * 2 / 36;
@@ -8340,10 +8337,10 @@ cornerContourWebGLTest_CornerContourWebGL.prototype = {
 			var this2 = this1;
 			_gthis.pen2D.arr = this2;
 			var s = _gthis.pen2D.arr[0] | 0;
-			if(_gthis.isDown) {
+			if(_gthis.mainSheet.isDown) {
 				var pen = _gthis.pen2D;
-				var ax = _gthis.x;
-				var ay = _gthis.y;
+				var ax = _gthis.mainSheet.mouseX;
+				var ay = _gthis.mainSheet.mouseY;
 				var pi = Math.PI;
 				var theta = pi / 2;
 				var step = pi * 2 / 36;
@@ -8540,6 +8537,10 @@ cornerContourWebGLTest_CornerContourWebGL.prototype = {
 			this1.gl.useProgram(this1.program);
 			this1.gl.drawArrays(4,0,(range.max - range.start) * 3 | 0);
 		};
+		var _this = this.mainSheet;
+		var body = window.document.body;
+		body.onmousedown = $bind(_this,_this.mouseDown);
+		body.onmouseup = $bind(_this,_this.mouseUp);
 	}
 	,initContours: function() {
 		this.pen2D = new cornerContour_Pen2D(-1);
